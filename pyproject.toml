@@ -1,11 +1,22 @@
 [project]
 name = "ba2bo2food"
 version = "0.1.0"
-description = "Add your description here"
+description = "Household meal planning driven by actual energy needs"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-    "claude-agent-sdk>=0.2.110",
-    "pydantic>=2.13.4",
+    "pydantic[email]>=2.13.4",
     "sqlalchemy>=2.0.51",
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.34",
+    "jinja2>=3.1",
+    "python-multipart>=0.0.20",
+    "itsdangerous>=2.2",
+    "bcrypt>=4.2",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "httpx>=0.28",
 ]

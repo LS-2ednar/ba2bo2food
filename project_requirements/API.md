@@ -21,7 +21,7 @@ PRD feature has a place to live before coding starts.
 | GET    | `/login`    | Login form.                                             |
 | POST   | `/login`    | Authenticate, start session.                            |
 | POST   | `/logout`   | End session.                                            |
-| POST   | `/locale`   | **(JSON, htmx)** Switch the current user's UI language (FRONTEND.md); persists to `User.Locale`. |
+| POST   | `/locale`   | Switch the current session/user's UI language (FRONTEND.md) and redirect back — a plain form post, since a locale change re-renders the whole page's text, not just a fragment. |
 
 ## Household
 
@@ -51,7 +51,7 @@ PRD feature has a place to live before coding starts.
 | GET    | `/recipes/{id}/edit`      | Edit recipe form.                                       |
 | POST   | `/recipes/{id}/edit`      | Save recipe changes (does not retroactively change past plans — DATA_MODEL `PlannedPortion` snapshot). |
 | POST   | `/recipes/{id}/delete`    | Delete a recipe.                                        |
-| GET    | `/ingredients/search`     | **(JSON)** Autocomplete existing `Ingredient`s by name, for the recipe form (DATA_MODEL decision). |
+| GET    | `/recipes/ingredient-row` | **(HTML fragment, htmx)** Returns one blank ingredient input row, appended to the recipe form's ingredient list by "Add ingredient" (FRONTEND.md). Ingredient autocomplete itself (DATA_MODEL decision) is a plain HTML `<datalist>` of all existing ingredients rendered directly into the form — no separate search endpoint needed at the scale of one household's ingredient list. |
 
 ## Weekly plans (PRD §5-7)
 

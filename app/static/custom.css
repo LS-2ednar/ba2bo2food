@@ -1,0 +1,100 @@
+/* Bottom tab bar on mobile, top nav on wider screens (FRONTEND.md §3). */
+nav.app-nav {
+  display: flex;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  justify-content: space-around;
+  background: var(--pico-card-background-color);
+  border-top: 1px solid var(--pico-muted-border-color);
+  padding: 0.5rem 0;
+  z-index: 10;
+}
+
+nav.app-nav a {
+  text-decoration: none;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+body {
+  padding-bottom: 4.5rem;
+}
+
+@media (min-width: 768px) {
+  nav.app-nav {
+    position: static;
+    justify-content: flex-start;
+    gap: 1.5rem;
+    border-top: none;
+    border-bottom: 1px solid var(--pico-muted-border-color);
+    padding: 1rem 0;
+  }
+
+  body {
+    padding-bottom: 0;
+  }
+}
+
+.locale-switch {
+  display: inline-flex;
+  gap: 0.25rem;
+  margin-inline-start: auto;
+}
+
+.locale-switch button {
+  padding: 0.1rem 0.4rem;
+  font-size: 0.8rem;
+}
+
+/* Plate-ratio visual (FRONTEND.md §5): a segmented bar sized by macro grams. */
+.plate-bar {
+  display: flex;
+  height: 1.25rem;
+  border-radius: var(--pico-border-radius);
+  overflow: hidden;
+  margin-block: 0.5rem;
+}
+
+.plate-bar .protein { background: #c0392b; }
+.plate-bar .carbs { background: #e1b12c; }
+.plate-bar .fat { background: #8e44ad; }
+.plate-bar .other { background: #27ae60; }
+
+.plate-legend {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.plate-legend span::before {
+  content: "\25A0";
+  margin-inline-end: 0.25rem;
+}
+
+.plate-legend .protein::before { color: #c0392b; }
+.plate-legend .carbs::before { color: #e1b12c; }
+.plate-legend .fat::before { color: #8e44ad; }
+.plate-legend .other::before { color: #27ae60; }
+
+.badge-warning {
+  background: #e1b12c;
+  color: #000;
+  padding: 0.1rem 0.5rem;
+  border-radius: var(--pico-border-radius);
+  font-size: 0.8rem;
+}
+
+.shopping-item.checked label {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+@media print {
+  nav.app-nav,
+  .no-print {
+    display: none !important;
+  }
+}

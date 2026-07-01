@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %} — {{ t("shopping_list.title") }}{% endblock %}
+{% block content %}
+<article>
+  <h1>{{ t("shopping_list.title") }}</h1>
+  <p>{{ block.StartDate }} – {{ block.EndDate }}</p>
+  <button class="no-print secondary" onclick="window.print()">{{ t("shopping_list.print") }}</button>
+
+  {% for item in block.ShoppingList.Items %}
+    {% include "plans/_shopping_list_item.html" %}
+  {% endfor %}
+</article>
+{% endblock %}

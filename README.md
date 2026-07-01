@@ -10,9 +10,9 @@ and shopping to a minimum.
 
 ## Status
 
-Early stage — data model and requirements are being defined before
-implementation starts. See [project_requirements/](project_requirements/)
-for the detailed specs this build is tracked against.
+The v1 slice described in [project_requirements/](project_requirements/)
+is implemented: auth/households, recipes, weekly plan generation,
+shopping lists, and progress tracking.
 
 ## Core concepts
 
@@ -36,8 +36,8 @@ for the detailed specs this build is tracked against.
 ## Tech stack
 
 - Python 3.10+, managed with [uv](https://docs.astral.sh/uv/)
-- FastAPI + Jinja2 server-rendered templates
-- SQLAlchemy models, Pydantic schemas
+- FastAPI + Jinja2 server-rendered templates, htmx for light interactivity
+- SQLAlchemy models
 - SQLite for storage
 - pytest for unit and integration tests
 
@@ -59,4 +59,12 @@ uv sync
 uv run main.py
 ```
 
-(Web server entry point will replace this once the FastAPI app exists.)
+Then open [http://127.0.0.1:8000](http://127.0.0.1:8000) — it redirects to
+`/login`, where you can register a new account (which also creates your
+household) or join an existing one with an invite code.
+
+Run the test suite with:
+
+```bash
+uv run pytest
+```

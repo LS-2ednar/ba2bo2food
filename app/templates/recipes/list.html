@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %} — {{ t("recipes.title") }}{% endblock %}
+{% block content %}
+<article>
+  <h1>{{ t("recipes.title") }}</h1>
+  <a role="button" href="/recipes/new">{{ t("recipes.new") }}</a>
+
+  {% if recipes %}
+    <ul>
+      {% for recipe in recipes %}
+        <li><a href="/recipes/{{ recipe.Id }}">{{ recipe.Name }}</a> — {{ "%.0f"|format(recipe.CaloriesPerBaseServing) }} kcal</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>{{ t("recipes.no_recipes") }}</p>
+  {% endif %}
+</article>
+{% endblock %}

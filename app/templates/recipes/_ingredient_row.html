@@ -1,0 +1,5 @@
+<div style="display:flex; gap:0.5rem;">
+  <input type="text" name="ingredient_name" list="ingredient-names" placeholder="{{ t('recipes.ingredient_name') }}" value="{{ line.Ingredient.Name if line else '' }}">
+  <input type="text" inputmode="decimal" name="ingredient_quantity" placeholder="{{ t('recipes.quantity') }}" value="{{ line.Quantity if line else '' }}">
+  <input type="text" name="ingredient_unit" placeholder="{{ t('recipes.unit') }}" value="{{ line.Unit if line else '' }}">
+</div>

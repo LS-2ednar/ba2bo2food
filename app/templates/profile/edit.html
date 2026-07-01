@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %} — {{ t("profile.edit") }}{% endblock %}
+{% block content %}
+<article>
+  <h1>{{ t("profile.edit") }}</h1>
+  <form method="post" action="/profile/edit">
+    <label>{{ t("auth.register.name") }}
+      <input type="text" name="name" required value="{{ current_user.Name }}">
+    </label>
+    <label>{{ t("auth.register.email") }}
+      <input type="email" name="email" required value="{{ current_user.Email }}">
+    </label>
+    <label>{{ t("auth.register.dob") }}
+      <input type="date" name="dob" required value="{{ current_user.DOB }}">
+    </label>
+    <fieldset>
+      <legend>{{ t("auth.register.sex") }}</legend>
+      <label><input type="radio" name="sex" value="male" {% if current_user.IsBornMale %}checked{% endif %}> {{ t("auth.register.sex_male") }}</label>
+      <label><input type="radio" name="sex" value="female" {% if not current_user.IsBornMale %}checked{% endif %}> {{ t("auth.register.sex_female") }}</label>
+    </fieldset>
+    <label>{{ t("auth.register.height") }}
+      <input type="number" step="0.1" name="height" required value="{{ current_user.Height }}">
+    </label>
+    <label>{{ t("auth.register.goal_weight") }}
+      <input type="number" step="0.1" name="goal_weight" required value="{{ current_user.GoalWeight }}">
+    </label>
+    <label>{{ t("auth.register.goal_date") }}
+      <input type="date" name="goal_date" required value="{{ current_user.GoalDate }}">
+    </label>
+    <label>{{ t("auth.register.trainings_per_week") }}
+      <input type="number" step="1" min="0" name="trainings_per_week" required value="{{ current_user.TrainingsPerWeek }}">
+    </label>
+    <button type="submit">{{ t("profile.save") }}</button>
+    <a href="/profile" role="button" class="secondary">{{ t("common.cancel") }}</a>
+  </form>
+</article>
+{% endblock %}

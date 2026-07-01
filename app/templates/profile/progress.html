@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %} — {{ t("progress.title") }}{% endblock %}
+{% block content %}
+<article>
+  <h1>{{ t("progress.title") }}</h1>
+
+  <h2>{{ t("progress.weight_history") }}</h2>
+  {% if checkins %}
+    <table>
+      <thead><tr><th>{{ t("progress.date") }}</th><th>{{ t("progress.weight") }}</th></tr></thead>
+      <tbody>
+        {% for checkin in checkins %}
+          <tr><td>{{ checkin.RecordedAt }}</td><td>{{ checkin.Weight }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>{{ t("progress.no_checkins") }}</p>
+  {% endif %}
+
+  <h2>{{ t("progress.meal_adherence") }}</h2>
+  {% if meal_logs %}
+    <table>
+      <thead><tr><th>{{ t("progress.date") }}</th><th>{{ t("progress.status") }}</th></tr></thead>
+      <tbody>
+        {% for log in meal_logs %}
+          <tr>
+            <td>{{ log.PlannedDay.Date }} — {{ t("plans." + log.MealType.value) }}</td>
+            <td>{{ t("plans.status_" + log.Status.value) }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>{{ t("progress.no_logs") }}</p>
+  {% endif %}
+</article>
+{% endblock %}

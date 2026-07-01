@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %} — {{ t("recipes.new") }}{% endblock %}
+{% block content %}
+<article>
+  <h1>{{ recipe.Name if recipe else t("recipes.new") }}</h1>
+  {% if error_key %}<p style="color: var(--pico-del-color)">{{ t(error_key) }}</p>{% endif %}
+
+  <datalist id="ingredient-names">
+    {% for ingredient_name in ingredient_names %}
+      <option value="{{ ingredient_name }}">
+    {% endfor %}
+  </datalist>
+
+  <form method="post" action="{{ '/recipes/' + recipe.Id|string + '/edit' if recipe else '/recipes' }}">
+    <label>{{ t("recipes.name") }}
+      <input type="text" name="name" required value="{{ recipe.Name if recipe else '' }}">
+    </label>
+    <label>{{ t("recipes.instructions") }}
+      <textarea name="instructions" required rows="6">{{ recipe.Instructions if recipe else '' }}</textarea>
+    </label>
+    <label>{{ t("recipes.base_servings") }}
+      <input type="number" step="1" min="1" name="base_servings" required value="{{ recipe.BaseServings if recipe else 1 }}">
+    </label>
+    <div class="grid">
+      <label>{{ t("recipes.calories") }} ({{ t("recipes.per_base_serving") }})
+        <input type="number" step="1" name="calories" required value="{{ recipe.CaloriesPerBaseServing if recipe else '' }}">
+      </label>
+      <label>{{ t("recipes.protein") }}
+        <input type="number" step="0.1" name="protein" required value="{{ recipe.ProteinGramsPerBaseServing if recipe else '' }}">
+      </label>
+      <label>{{ t("recipes.carbs") }}
+        <input type="number" step="0.1" name="carbs" required value="{{ recipe.CarbGramsPerBaseServing if recipe else '' }}">
+      </label>
+      <label>{{ t("recipes.fat") }}
+        <input type="number" step="0.1" name="fat" required value="{{ recipe.FatGramsPerBaseServing if recipe else '' }}">
+      </label>
+    </div>
+
+    <h2>{{ t("recipes.ingredients") }}</h2>
+    <div id="ingredient-rows">
+      {% if recipe and recipe.Ingredients %}
+        {% for line in recipe.Ingredients %}
+          {% include "recipes/_ingredient_row.html" %}
+        {% endfor %}
+      {% else %}
+        {% for _ in range(3) %}
+          {% set line = none %}
+          {% include "recipes/_ingredient_row.html" %}
+        {% endfor %}
+      {% endif %}
+    </div>
+    <button type="button" class="secondary" hx-get="/recipes/ingredient-row" hx-target="#ingredient-rows" hx-swap="beforeend">
+      {{ t("recipes.add_ingredient") }}
+    </button>
+
+    <button type="submit">{{ t("recipes.save") }}</button>
+  </form>
+</article>
+{% endblock %}

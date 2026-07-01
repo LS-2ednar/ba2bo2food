@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %} — {{ t("plans.title") }}{% endblock %}
+{% block content %}
+<article>
+  <h1>{{ t("plans.title") }}</h1>
+  <a role="button" href="/plans/new">{{ t("plans.new") }}</a>
+
+  {% if blocks %}
+    <ul>
+      {% for block in blocks %}
+        <li><a href="/plans/{{ block.Id }}">{{ block.StartDate }} – {{ block.EndDate }}</a></li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>{{ t("plans.no_plans") }}</p>
+  {% endif %}
+</article>
+{% endblock %}

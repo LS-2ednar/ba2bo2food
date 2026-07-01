@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="{{ locale }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ t("app.name") }}{% block title %}{% endblock %}</title>
+  <link rel="stylesheet" href="/static/pico.min.css">
+  <link rel="stylesheet" href="/static/custom.css">
+  <script src="/static/htmx.min.js" defer></script>
+</head>
+<body>
+  <header class="container">
+    <nav class="app-nav">
+      {% if current_user %}
+        <a href="/plans">{{ t("nav.plans") }}</a>
+        <a href="/recipes">{{ t("nav.recipes") }}</a>
+        <a href="/household">{{ t("nav.household") }}</a>
+        <a href="/profile">{{ t("nav.profile") }}</a>
+        <form method="post" action="/logout" style="display:inline">
+          <button type="submit" class="secondary outline">{{ t("nav.logout") }}</button>
+        </form>
+      {% else %}
+        <a href="/login">{{ t("nav.login") }}</a>
+      {% endif %}
+      <form method="post" action="/locale" class="locale-switch no-print">
+        <input type="hidden" name="redirect_to" value="{{ request.url.path }}">
+        <button type="submit" name="locale" value="en" {% if locale == "en" %}disabled{% endif %}>EN</button>
+        <button type="submit" name="locale" value="de" {% if locale == "de" %}disabled{% endif %}>DE</button>
+      </form>
+    </nav>
+  </header>
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

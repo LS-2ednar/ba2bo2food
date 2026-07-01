@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %} — {{ t("household.title") }}{% endblock %}
+{% block content %}
+<article>
+  <h1>{{ household.Name }}</h1>
+
+  <h2>{{ t("household.members") }}</h2>
+  <ul>
+    {% for member in members %}
+      <li>{{ member.Name }}</li>
+    {% endfor %}
+  </ul>
+
+  <h2>{{ t("household.invite_code") }}</h2>
+  <p>{{ t("household.invite_help") }}</p>
+  <p><code>{{ household.InviteCode }}</code></p>
+  <form method="post" action="/household/invite">
+    <button type="submit" class="secondary">{{ t("household.regenerate_invite") }}</button>
+  </form>
+</article>
+{% endblock %}

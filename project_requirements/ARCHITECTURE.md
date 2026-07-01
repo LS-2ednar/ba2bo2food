@@ -3,9 +3,8 @@
 ## 1. Shape of the system
 
 A single Python monolith: FastAPI serving server-rendered Jinja2 pages,
-backed by SQLite via SQLAlchemy, with Pydantic for request/response and
-domain validation. No separate frontend build, no external services.
-Deployment is local/self-hosted (see README).
+backed by SQLite via SQLAlchemy. No separate frontend build, no external
+services. Deployment is local/self-hosted (see README).
 
 ```
 Browser ── HTML forms/pages ──▶ FastAPI routers ──▶ services (domain logic) ──▶ SQLAlchemy models ──▶ SQLite
@@ -30,9 +29,10 @@ TESTING.md):
 3. **Persistence layer** (`app/models/`, `app/db.py`) — SQLAlchemy ORM
    models (per DATA_MODEL.md) and session/engine setup.
 
-Pydantic schemas (`app/schemas/`) sit between layers 1 and 2/3: they
-validate incoming form data and shape data handed to templates, but are
-not the same classes as the SQLAlchemy models.
+Routers parse form data with FastAPI's own `Form(...)` request parameters
+directly (no separate Pydantic request-schema layer) — there's no JSON
+API to validate against, and FastAPI's form parameters already give
+type coercion and validation errors for free.
 
 ## 3. Project structure
 
@@ -41,21 +41,24 @@ ba2bo2food/
   app/
     main.py              # FastAPI app instance, router registration
     db.py                 # engine/session setup
-    models/               # SQLAlchemy models (User, Household, Recipe, ...)
-    schemas/               # Pydantic request/response models
+    security.py            # password hashing, invite code generation
+    dependencies.py          # get_db, current-user/session dependencies
+    templating.py              # Jinja2Templates + locale-aware render() helper
+    i18n.py                      # translation lookup
+    models/                        # SQLAlchemy models (User, Household, Recipe, ...)
     services/
-      calorie_targets.py   # BMR, PAL, goal pacing (PRD §3)
-      planning.py            # weekly plan generation (PRD §5-6)
-      shopping_list.py        # ingredient consolidation (PRD §7)
+      calorie_targets.py            # BMR, PAL, goal pacing (PRD §3)
+      planning.py                     # weekly plan generation (PRD §5-6)
+      shopping_list.py                  # ingredient consolidation (PRD §7)
     routers/
       auth.py
       households.py
       recipes.py
       plans.py
-      progress.py             # weight check-ins, adherence logging (PRD §8)
-    i18n/                       # en.json, de.json translation strings (FRONTEND.md)
-    templates/                    # Jinja2 templates
-    static/                          # CSS (Pico.css + custom.css), vendored htmx (FRONTEND.md)
+      progress.py                         # weight check-ins, adherence logging (PRD §8)
+    i18n/                                   # en.json, de.json translation strings (FRONTEND.md)
+    templates/                                # Jinja2 templates
+    static/                                     # CSS (Pico.css + custom.css), vendored htmx (FRONTEND.md)
   data/                        # sqlite db file (gitignored)
   project_requirements/
   tests/
@@ -63,8 +66,9 @@ ba2bo2food/
     integration/                # routers + a test DB
 ```
 
-`main.py` and `utils/datamodel.py` at the repo root are early scaffolding
-and will be absorbed into this structure as implementation starts.
+The root `main.py` is just a thin `uv run main.py` convenience wrapper
+around `uvicorn app.main:app`; the early `utils/datamodel.py` sketch has
+been absorbed into `app/models/` as described above.
 
 ## 4. Authentication
 

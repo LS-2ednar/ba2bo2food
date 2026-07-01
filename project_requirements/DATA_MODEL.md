@@ -119,6 +119,8 @@ One day within a block, with its assigned dinner recipe (PRD §6).
 | PlannedBlockId  | int (FK)  |                                                                  |
 | Date            | date      |                                                                  |
 | DinnerRecipeId  | int (FK)  | The recipe cooked for dinner this day (and lunch the next day, unless this is the block's last day — PRD §5.4). |
+| PortionsCooked  | int       | 2 for every day except the block's last (1) — PRD §5.4.          |
+| IsFlagged       | bool      | Set when no recipe fit every member's scale bound and the closest-fit fallback was used instead (PRD §5.5). |
 
 ## PlannedPortion
 

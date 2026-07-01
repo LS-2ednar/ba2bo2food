@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %} — {{ t("auth.register.title") }}{% endblock %}
+{% block content %}
+<article>
+  <h1>{{ t("auth.register.title") }}</h1>
+  {% if error_key %}<p style="color: var(--pico-del-color)">{{ t(error_key) }}</p>{% endif %}
+  <form method="post" action="/register">
+    <label>{{ t("auth.register.name") }}
+      <input type="text" name="name" required>
+    </label>
+    <label>{{ t("auth.register.email") }}
+      <input type="email" name="email" required>
+    </label>
+    <label>{{ t("auth.register.password") }}
+      <input type="password" name="password" required minlength="8">
+    </label>
+    <label>{{ t("auth.register.dob") }}
+      <input type="date" name="dob" required>
+    </label>
+    <fieldset>
+      <legend>{{ t("auth.register.sex") }}</legend>
+      <label><input type="radio" name="sex" value="male" required> {{ t("auth.register.sex_male") }}</label>
+      <label><input type="radio" name="sex" value="female"> {{ t("auth.register.sex_female") }}</label>
+    </fieldset>
+    <label>{{ t("auth.register.height") }}
+      <input type="number" step="0.1" name="height" required>
+    </label>
+    <label>{{ t("auth.register.weight") }}
+      <input type="number" step="0.1" name="weight" required>
+    </label>
+    <label>{{ t("auth.register.goal_weight") }}
+      <input type="number" step="0.1" name="goal_weight" required>
+    </label>
+    <label>{{ t("auth.register.goal_date") }}
+      <input type="date" name="goal_date" required>
+    </label>
+    <label>{{ t("auth.register.trainings_per_week") }}
+      <input type="number" step="1" min="0" name="trainings_per_week" required>
+    </label>
+
+    <fieldset>
+      <legend>{{ t("auth.register.household_mode") }}</legend>
+      <label><input type="radio" name="household_mode" value="create" checked> {{ t("auth.register.household_create") }}</label>
+      <input type="text" name="household_name" placeholder="{{ t('auth.register.household_name') }}">
+      <label><input type="radio" name="household_mode" value="join"> {{ t("auth.register.household_join") }}</label>
+      <input type="text" name="invite_code" placeholder="{{ t('auth.register.invite_code') }}">
+    </fieldset>
+
+    <button type="submit">{{ t("auth.register.submit") }}</button>
+  </form>
+  <a href="/login">{{ t("auth.register.have_account") }}</a>
+</article>
+{% endblock %}

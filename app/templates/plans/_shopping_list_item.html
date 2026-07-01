@@ -1,0 +1,8 @@
+<div id="item-{{ item.Id }}" class="shopping-item{% if item.Checked %} checked{% endif %}">
+  <label>
+    <input type="checkbox" {% if item.Checked %}checked{% endif %}
+      hx-post="/plans/{{ item.ShoppingList.PlannedBlock.Id }}/shopping-list/items/{{ item.Id }}/check"
+      hx-target="#item-{{ item.Id }}" hx-swap="outerHTML">
+    {{ "%.2f"|format(item.TotalQuantity) }} {{ item.Unit }} {{ item.Ingredient.Name }}
+  </label>
+</div>

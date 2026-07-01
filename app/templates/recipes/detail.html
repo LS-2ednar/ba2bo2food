@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %} — {{ recipe.Name }}{% endblock %}
+{% block content %}
+{% set protein_kcal = recipe.ProteinGramsPerBaseServing * 4 %}
+{% set carb_kcal = recipe.CarbGramsPerBaseServing * 4 %}
+{% set fat_kcal = recipe.FatGramsPerBaseServing * 9 %}
+{% set other_kcal = [recipe.CaloriesPerBaseServing - protein_kcal - carb_kcal - fat_kcal, 0] | max %}
+{% set total_kcal = protein_kcal + carb_kcal + fat_kcal + other_kcal %}
+<article>
+  <h1>{{ recipe.Name }}</h1>
+  <p>{{ "%.0f"|format(recipe.CaloriesPerBaseServing) }} kcal {{ t("recipes.per_base_serving") }}
+    ({{ recipe.BaseServings }})</p>
+
+  <h2>{{ t("recipes.plate_rule") }}</h2>
+  {% if total_kcal > 0 %}
+    <div class="plate-bar">
+      <div class="protein" style="width: {{ (protein_kcal / total_kcal * 100) | round(1) }}%"></div>
+      <div class="carbs" style="width: {{ (carb_kcal / total_kcal * 100) | round(1) }}%"></div>
+      <div class="fat" style="width: {{ (fat_kcal / total_kcal * 100) | round(1) }}%"></div>
+      <div class="other" style="width: {{ (other_kcal / total_kcal * 100) | round(1) }}%"></div>
+    </div>
+    <div class="plate-legend">
+      <span class="protein">{{ t("recipes.protein") }}: {{ recipe.ProteinGramsPerBaseServing }}g</span>
+      <span class="carbs">{{ t("recipes.carbs") }}: {{ recipe.CarbGramsPerBaseServing }}g</span>
+      <span class="fat">{{ t("recipes.fat") }}: {{ recipe.FatGramsPerBaseServing }}g</span>
+      <span class="other">{{ t("recipes.other") }}</span>
+    </div>
+  {% endif %}
+
+  <h2>{{ t("recipes.ingredients") }}</h2>
+  <ul>
+    {% for line in recipe.Ingredients %}
+      <li>{{ line.Quantity }} {{ line.Unit }} {{ line.Ingredient.Name }}</li>
+    {% endfor %}
+  </ul>
+
+  <h2>{{ t("recipes.instructions") }}</h2>
+  <p style="white-space: pre-wrap">{{ recipe.Instructions }}</p>
+
+  <div role="group">
+    <a role="button" href="/recipes/{{ recipe.Id }}/edit">{{ t("recipes.edit") }}</a>
+    <form method="post" action="/recipes/{{ recipe.Id }}/delete" onsubmit="return confirm('{{ t('recipes.delete') }}?')">
+      <button type="submit" class="secondary">{{ t("recipes.delete") }}</button>
+    </form>
+  </div>
+</article>
+{% endblock %}

@@ -13,9 +13,11 @@ no CDN dependency, matching the local/self-hosted deployment target):
 
 - Server endpoints return small HTML fragments (not JSON) for htmx to
   swap into the page.
-- Two current use cases (API.md): ingredient autocomplete while writing a
-  recipe, and toggling a shopping-list item's checked state without a
-  full page reload.
+- Two current use cases (API.md): adding a blank ingredient row while
+  writing a recipe, and toggling a shopping-list item's checked state
+  without a full page reload. Ingredient *autocomplete* itself is a plain
+  HTML `<datalist>` rendered with the form (no round-trip needed at the
+  scale of one household's ingredient list).
 - Default to plain forms/links first; reach for htmx only where a full
   page reload would be annoyingly slow or would lose scroll position
   (e.g. checking off items while scrolling a long shopping list).
@@ -63,9 +65,10 @@ Full i18n from the start, since both languages are needed on day one:
 - **Locale resolution order:** logged-in user's `User.Locale` (§ see
   DATA_MODEL.md) → browser `Accept-Language` header → English default.
   `POST /locale` (API.md) updates `User.Locale` for logged-in users; for
-  the pre-login `/register`/`/login` pages, it's stored in a cookie.
-- A visible language switcher (e.g. "EN / DE") lives in the nav, using
-  htmx to swap it without a full page reload.
+  the pre-login `/register`/`/login` pages, it's stored in the session.
+- A visible language switcher ("EN / DE") lives in the nav as a plain form
+  post-redirect (not htmx) — a locale change re-renders every string on
+  the page, so there's no fragment small enough to swap.
 - Numbers/dates use each locale's convention where they differ (e.g. date
   format), but units stay metric always (PRD §9 — no imperial support).
 

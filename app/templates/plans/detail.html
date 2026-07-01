@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %} — {{ t("plans.title") }}{% endblock %}
+{% block content %}
+<article>
+  <h1>{{ block.StartDate }} – {{ block.EndDate }}</h1>
+  <a role="button" class="secondary" href="/plans/{{ block.Id }}/shopping-list">{{ t("plans.shopping_list") }}</a>
+
+  {% for day in block.Days %}
+    <section>
+      <h2>{{ t("plans.day") }} {{ loop.index }} — {{ day.Date }}</h2>
+
+      {% if not loop.first %}
+        {% set prev_day = block.Days[loop.index0 - 1] %}
+        <h3>{{ t("plans.lunch") }}: {{ prev_day.DinnerRecipe.Name }}</h3>
+        {% set my_lunch = my_logs.get((prev_day.Id, "lunch")) %}
+        <form method="post" action="/plans/{{ block.Id }}/days/{{ prev_day.Id }}/meals/lunch/log">
+          <fieldset role="group">
+            <select name="status">
+              <option value="eaten" {% if my_lunch and my_lunch.Status.value == "eaten" %}selected{% endif %}>{{ t("plans.status_eaten") }}</option>
+              <option value="skipped" {% if my_lunch and my_lunch.Status.value == "skipped" %}selected{% endif %}>{{ t("plans.status_skipped") }}</option>
+              <option value="swapped" {% if my_lunch and my_lunch.Status.value == "swapped" %}selected{% endif %}>{{ t("plans.status_swapped") }}</option>
+            </select>
+            <button type="submit">{{ t("plans.log_meal") }}</button>
+          </fieldset>
+        </form>
+      {% endif %}
+
+      <h3>{{ t("plans.dinner") }}: {{ day.DinnerRecipe.Name }}
+        {% if day.IsFlagged %}<span class="badge-warning">{{ t("plans.flagged_warning") }}</span>{% endif %}
+      </h3>
+      <ul>
+        {% for portion in day.Portions %}
+          <li>{{ portion.User.Name }}: {{ "%.0f"|format(portion.Calories) }} kcal ({{ "%.2f"|format(portion.ScaleFactor) }}x)</li>
+        {% endfor %}
+      </ul>
+      {% set my_dinner = my_logs.get((day.Id, "dinner")) %}
+      <form method="post" action="/plans/{{ block.Id }}/days/{{ day.Id }}/meals/dinner/log">
+        <fieldset role="group">
+          <select name="status">
+            <option value="eaten" {% if my_dinner and my_dinner.Status.value == "eaten" %}selected{% endif %}>{{ t("plans.status_eaten") }}</option>
+            <option value="skipped" {% if my_dinner and my_dinner.Status.value == "skipped" %}selected{% endif %}>{{ t("plans.status_skipped") }}</option>
+            <option value="swapped" {% if my_dinner and my_dinner.Status.value == "swapped" %}selected{% endif %}>{{ t("plans.status_swapped") }}</option>
+          </select>
+          <button type="submit">{{ t("plans.log_meal") }}</button>
+        </fieldset>
+      </form>
+    </section>
+  {% endfor %}
+</article>
+{% endblock %}
